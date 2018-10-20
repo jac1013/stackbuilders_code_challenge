@@ -14,6 +14,17 @@ func NewOrderOperation(persister OrderPersistence) OrdersOperationImpl {
 }
 
 func (ordersOperation OrdersOperationImpl) Create(order Order) (*Order, error) {
+	calculateTotalPrice(&order)
 	model, _ := ordersOperation.persister.Save(order)
 	return model, nil
+}
+
+func calculateTotalPrice(order *Order) {
+	total := 0
+
+	for _, ingredient := range order.Ingredients {
+		total += GetPrice(ingredient)
+	}
+
+	order.Total = total + order.GetSizePrice()
 }

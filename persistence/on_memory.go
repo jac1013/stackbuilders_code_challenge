@@ -5,6 +5,8 @@ import (
 	"stackbuilders_pizza/business/persistence"
 )
 
+var id = 0
+
 type OnMemoryPersistence struct {
 	orders []OrderOnMemoryModel
 }
@@ -14,6 +16,8 @@ func NewOnMemoryPersistence() persistence.OrderPersistence {
 }
 
 func (memory OnMemoryPersistence) Save(order Order) (*Order, error) {
+	id++
+	order.ID = id
 	memory.orders = append(memory.orders, memory.translate(order))
 	return &order, nil
 }
