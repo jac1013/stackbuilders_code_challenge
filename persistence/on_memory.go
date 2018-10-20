@@ -12,21 +12,21 @@ type OnMemoryPersistence struct {
 }
 
 func NewOnMemoryPersistence() persistence.OrderPersistence {
-	return OnMemoryPersistence{orders: make([]OrderOnMemoryModel, 0)}
+	return &OnMemoryPersistence{orders: make([]OrderOnMemoryModel, 0)}
 }
 
-func (memory OnMemoryPersistence) Save(order Order) (*Order, error) {
+func (memory *OnMemoryPersistence) Save(order Order) (*Order, error) {
 	id++
 	order.ID = id
 	memory.orders = append(memory.orders, memory.translate(order))
 	return &order, nil
 }
 
-func (memory OnMemoryPersistence) GetAll() Orders {
+func (memory *OnMemoryPersistence) GetAll() Orders {
 	return memory.translateAllToBusiness(memory.orders)
 }
 
-func (memory OnMemoryPersistence) Get(id int) *Order {
+func (memory *OnMemoryPersistence) Get(id int) *Order {
 	for _, order := range memory.orders {
 		if order.ID == id {
 			model := memory.translateToBusiness(order)
